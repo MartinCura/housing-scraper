@@ -1,7 +1,10 @@
-from bs4 import BeautifulSoup
-import logging
 import re
-from providers.base_provider import BaseProvider
+import logging
+
+from bs4 import BeautifulSoup
+
+from app.providers.base_provider import BaseProvider
+
 
 class Argenprop(BaseProvider):
     def props_in_source(self, source):
@@ -12,10 +15,10 @@ class Argenprop(BaseProvider):
         while(True):
             logging.info(f"Requesting {page_link}")
             page_response = self.request(page_link)
-            
+
             if page_response.status_code != 200:
                 break
-            
+
             page_content = BeautifulSoup(page_response.content, 'lxml')
             properties = page_content.find_all('div', class_='listing__item')
 
@@ -30,9 +33,9 @@ class Argenprop(BaseProvider):
                 href = prop.find('a', class_='card')['href']
                 matches = re.search(regex, href)
                 internal_id = matches.group(1)
-                    
+
                 yield {
-                    'title': title, 
+                    'title': title,
                     'url': self.provider_data['base_url'] + href,
                     'internal_id': internal_id,
                     'provider': self.provider_name

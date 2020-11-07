@@ -1,5 +1,6 @@
-/properties.db
+*.sqlite
 /configuration.yml
 /**/__pycache__
 /.vscode
 /.idea
+.venv

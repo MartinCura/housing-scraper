@@ -1,7 +1,10 @@
-from bs4 import BeautifulSoup
-import logging
 import re
-from providers.base_provider import BaseProvider
+import logging
+
+from bs4 import BeautifulSoup
+
+from app.providers.base_provider import BaseProvider
+
 
 class Mercadolibre(BaseProvider):
     def props_in_source(self, source):
@@ -15,7 +18,7 @@ class Mercadolibre(BaseProvider):
 
             if page_response.status_code != 200:
                 break
-            
+
             page_content = BeautifulSoup(page_response.content, 'lxml')
             properties = page_content.find_all('li', class_='ui-search-layout__item')
 
@@ -35,9 +38,9 @@ class Mercadolibre(BaseProvider):
                     ': ' + title_section.find('h2').get_text().strip()
                 if price_section is not None:
                     title = title + ' ' + price_section.get_text().strip()
-        
+
                 yield {
-                    'title': title, 
+                    'title': title,
                     'url': href,
                     'internal_id': internal_id,
                     'provider': self.provider_name
@@ -45,4 +48,3 @@ class Mercadolibre(BaseProvider):
 
             from_ += 50
             page_link = self.provider_data['base_url'] + source + f"_Desde_{from_}_NoIndex_True"
-    

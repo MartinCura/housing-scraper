@@ -1,6 +1,9 @@
-from bs4 import BeautifulSoup
 import logging
-from providers.base_provider import BaseProvider
+
+from bs4 import BeautifulSoup
+
+from app.providers.base_provider import BaseProvider
+
 
 class Properati(BaseProvider):
     def props_in_source(self, source):

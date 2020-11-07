@@ -1,10 +1,16 @@
 import logging
 import sqlite3
-from providers.zonaprop import Zonaprop
-from providers.argenprop import Argenprop
-from providers.mercadolibre import Mercadolibre
-from providers.properati import Properati
-from providers.inmobusqueda import Inmobusqueda
+
+from app.providers.zonaprop import Zonaprop
+from app.providers.argenprop import Argenprop
+from app.providers.mercadolibre import Mercadolibre
+from app.providers.properati import Properati
+from app.providers.inmobusqueda import Inmobusqueda
+
+
+# TODO: move to config file
+DATABASE_FILE = 'data/properties.sqlite'
+
 
 def register_property(conn, prop):
     stmt = 'INSERT INTO properties (internal_id, provider, url) VALUES (:internal_id, :provider, :url)'
@@ -13,16 +19,17 @@ def register_property(conn, prop):
     except Exception as e:
         print(e)
 
+
 def process_properties(provider_name, provider_data):
     provider = get_instance(provider_name, provider_data)
 
-    new_properties = []
-
     # db connection
-    conn = sqlite3.connect('properties.db')
+    conn = sqlite3.connect(DATABASE_FILE)
 
-    # Check to see if we know it
+    # Grab properties we've already seen
     stmt = 'SELECT * FROM properties WHERE internal_id=:internal_id AND provider=:provider'
+
+    new_properties = []
 
     with conn:
         for prop in provider.next_prop():
@@ -36,8 +43,9 @@ def process_properties(provider_name, provider_data):
                 logging.info('It is a new one')
                 register_property(conn, prop)
                 new_properties.append(prop)
-                    
+
     return new_properties
+
 
 def get_instance(provider_name, provider_data):
     if provider_name == 'zonaprop':
