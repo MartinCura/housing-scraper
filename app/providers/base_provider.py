@@ -18,6 +18,7 @@ class BaseProvider(ABC):
         return self.__scraper.get(url)
 
     def next_prop(self):
+        logging.info(f"Sources: {self.provider_data['sources']}")
         for source in self.provider_data['sources']:
             logging.info(f'Processing source {source}')
             yield from self.props_in_source(source)

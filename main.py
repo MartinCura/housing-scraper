@@ -8,7 +8,7 @@ from app.notifier import Notifier
 
 
 def main():
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO) #, filename='data/the.log')
 
     with open("configuration.yml", 'r') as ymlfile:
         cfg = yaml.safe_load(ymlfile)

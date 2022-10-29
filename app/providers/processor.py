@@ -9,7 +9,7 @@ from app.providers.inmobusqueda import Inmobusqueda
 
 
 # TODO: move to config file
-DATABASE_FILE = 'data/properties.sqlite'
+SQLITE_DB_FILE = 'data/properties.sqlite'
 
 
 def register_property(conn, prop):
@@ -24,7 +24,7 @@ def process_properties(provider_name, provider_data):
     provider = get_instance(provider_name, provider_data)
 
     # db connection
-    conn = sqlite3.connect(DATABASE_FILE)
+    conn = sqlite3.connect(SQLITE_DB_FILE)
 
     # Grab properties we've already seen
     stmt = 'SELECT * FROM properties WHERE internal_id=:internal_id AND provider=:provider'
@@ -38,7 +38,7 @@ def process_properties(provider_name, provider_data):
             cur.execute(stmt, {'internal_id': prop['internal_id'], 'provider': prop['provider']})
             result = cur.fetchone()
             cur.close()
-            if result == None:
+            if result is None:
                 # Insert and save for notification
                 logging.info('It is a new one')
                 register_property(conn, prop)

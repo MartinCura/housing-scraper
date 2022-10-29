@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
 import sqlite3
 
 
-DATABASE_FILE = "data/properties.sqlite"
+SQLITE_DB_FILE = "data/properties.sqlite"
 
 
 def create_connection(db_file):
@@ -45,7 +46,7 @@ sql_create_index_on_properties_table = """
 """
 
 
-conn = create_connection(DATABASE_FILE)
+conn = create_connection(SQLITE_DB_FILE)
 
 with conn:
     if conn:
